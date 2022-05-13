@@ -65,6 +65,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 30.w),
                         child: Container(
+                          height: 30.h,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
@@ -106,6 +107,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     ],
                   ),
                 ),
+
                 Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.7,
