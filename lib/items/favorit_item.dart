@@ -7,7 +7,20 @@ import 'package:library_app/drawer_screens/favorite_screen.dart';
 
 
 
-class FavoriteItem extends StatelessWidget {
+class FavoriteItem extends StatefulWidget {
+  final id ;
+  final title;
+  final _favoriteMeals;
+  final Function _toggleFavoritel;
+  FavoriteItem( this._favoriteMeals, this._toggleFavoritel, this.id, this.title);
+
+  @override
+  State<FavoriteItem> createState() => _FavoriteItemState();
+}
+
+class _FavoriteItemState extends State<FavoriteItem> {
+  bool isFavorite=false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,16 +51,21 @@ class FavoriteItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               myText(
-                "الصف الأول الإبتدائي الترم الأول",
-                13,
-                FontWeight.w600
+                  "${widget.title}",
+                  13,
+                  FontWeight.w600
               ),
 
-              IconButton(
-                icon: Icon(Icons.favorite , size: 30, color: Colors.grey, ),
-                onPressed: (){
-                  ToAndFinish(context, FavoriteScreen());
 
+              IconButton(
+                icon: Icon(isFavorite?Icons.favorite:Icons.favorite_border , size: 30, color: isFavorite?Colors.red:Colors.black54,),
+                onPressed: (){
+                  setState(() {
+                    widget._toggleFavoritel(widget.id);
+
+                    isFavorite = (!isFavorite) ;
+                    print(widget.id);
+                  });
                 },
               ),
             ],

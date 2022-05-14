@@ -16,7 +16,7 @@ class _FavoriyeTapScreenState extends State<FavoriyeTapScreen> {
        ListView.builder(
         itemCount: 10,
         itemBuilder: (context , index){
-          return FavoriteItem();
+            return Text('');
         }
 
     );

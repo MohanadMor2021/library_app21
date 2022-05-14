@@ -41,7 +41,9 @@ dependencies:
   flutter_screenutil: ^4.0.2+5
   device_preview: ^1.0.0
   hexcolor:
-
+  share_plus: ^4.0.4
+  shared_preferences:
+  intl:
 dev_dependencies:
   flutter_test:
     sdk: flutter

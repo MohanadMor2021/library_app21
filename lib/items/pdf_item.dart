@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/size_extension.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:library_app/components/global_componnets.dart';
 import 'package:library_app/dummy_data/pdf_files_datd.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:async';
+import '../next_screen.dart';
 
 class PdfItem extends StatefulWidget {
 
@@ -19,10 +24,33 @@ class PdfItem extends StatefulWidget {
 
 class _PdfItemState extends State<PdfItem> {
 
+  int counter=0;
 
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  DateTime initDate;
+  var resultDate=0;
+
+  void sharePressed() {
+    final names = "www.google.com";
+    List<String> result = names.split(',').toList();
+
+    Share.share('${widget.pdf.title} /n ${names}');
+    /// optional subject that will be used when sharing to email
+    // Share.share(message, subject: 'Become An Elite Flutter Developer');
+
+    /// share a file
+    // Share.shareFiles(['${directory.path}/image.jpg'], text: 'Great picture');
+    /// share multiple files
+    // Share.shareFiles(['${directory.path}/image1.jpg', '${directory.path}/image2.jpg']);
+  }
 
 
   void _viewFile() async {
+    final SharedPreferences prefs = await _prefs;
+    print('      هدااااااااا الوقت بالدقائق  ${DateTime.now()}');
+    var secoundDate=DateTime.parse( prefs.getString('date'));
+    resultDate = DateTime.now().difference(secoundDate).inSeconds.toInt();
+    if(counter<3){
     final _url =
         widget.pdf.pdfUrl;
     if (await canLaunch(_url)) {
@@ -30,8 +58,39 @@ class _PdfItemState extends State<PdfItem> {
     } else {
 
     }
+   if( resultDate>30)
+    setState(() {
+      counter++;
+      print('$counter هدااااااا الكونتر ');
+    });
+    }
+    else{
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) =>  NextScreen()),
+      ).then((value)async {
+        await  prefs.setString('date', DateTime.now().toIso8601String());
+        print('تم التخزيييييييييييييييييييين');
+
+counter=0;
+
+      });
+    }
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+ _prefs=SharedPreferences.getInstance();
+
+    var now =DateTime.now();
+    initDate=now;
+    // String formattedTime = DateFormat.Hm().format(now);
+    print('هدا الوقت الحالي لما تدخل التطبيق   $now');
+
+  }
 
 
 
@@ -104,6 +163,7 @@ class _PdfItemState extends State<PdfItem> {
                           "تحميل",
                           Icon(Icons.arrow_circle_down , color: Colors.white,),
                             (){
+
                               showDialog(
                                 context: context,
                                // barrierDismissible: false,
@@ -134,7 +194,7 @@ class _PdfItemState extends State<PdfItem> {
                                       ),
 
                                       TextButton(
-                                        onPressed: _viewFile,
+                                        onPressed:  _viewFile,
                                         child:  Text(
                                           "تنزيل",
                                           style:  GoogleFonts.cairo(
@@ -156,7 +216,7 @@ class _PdfItemState extends State<PdfItem> {
                         myPdfRowItem(
                             "مشاركة",
                             Icon(Icons.share , color: Colors.white,),
-                            _viewFile,
+                          sharePressed,
                         ),
 
 
